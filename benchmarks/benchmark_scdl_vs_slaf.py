@@ -41,7 +41,7 @@ def main():
     parser.add_argument("--clean", action="store_true", help="Clean cached datasets")
     args = parser.parse_args()
     
-    SLAF_PATH, SCDL_PATH = prepare_datasets(args.clean)
+    H5AD_PATH, SLAF_PATH, SCDL_PATH = prepare_datasets(args.clean)
 
         # Run the benchmarks
     bench = ExternalDataloaderBenchmark(

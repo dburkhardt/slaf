@@ -55,7 +55,7 @@ class ExternalDataloaderBenchmark:
     def __init__(
         self,
         slaf_path: str,
-        h5ad_path: str,
+        h5ad_path: str = None,
         tiledb_path: str = None,
         scdl_path: str = None,
     ):
@@ -69,14 +69,16 @@ class ExternalDataloaderBenchmark:
         self.console.print(f"Loading SLAF array from {slaf_path}...")
         self.slaf_array = SLAFArray(slaf_path)
 
-        # Load AnnData object once to avoid repeated loading
-        self.console.print(f"Loading AnnData from {h5ad_path}...")
-        import anndata as ad
+        # Load AnnData object once to avoid repeated loading (only if provided)
+        self.adata = None
+        if h5ad_path is not None:
+            self.console.print(f"Loading AnnData from {h5ad_path}...")
+            import anndata as ad
 
-        self.adata = ad.read_h5ad(h5ad_path, backed="r")
-        self.console.print(
-            f"Loaded {self.adata.n_obs:,} cells, {self.adata.n_vars:,} genes"
-        )
+            self.adata = ad.read_h5ad(h5ad_path, backed="r")
+            self.console.print(
+                f"Loaded {self.adata.n_obs:,} cells, {self.adata.n_vars:,} genes"
+            )
 
         # Define competitor systems and their configurations
         self.batch_size = 64
